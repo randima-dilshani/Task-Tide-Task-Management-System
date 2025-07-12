@@ -1,27 +1,41 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import SignUpImage from "../../assets/images/signUp.png";
+import { motion } from "framer-motion";
+import SignUpImage from "../../assets/images/task5.jpg";
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
+const imageVariants = {
+  hidden: { opacity: 0, x: -40 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } },
+};
+
+const formVariants = {
+  hidden: { opacity: 0, x: 40 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut", delay: 0.3 } },
+};
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({}); // State for error messages
+  const [errors, setErrors] = useState("");
 
   const resetForm = () => {
     setUsername("");
     setEmail("");
     setConfirmPassword("");
     setPassword("");
-    setErrors(""); // Clear any previous error messages
+    setErrors("");
   };
 
   const sendData = async (e) => {
     e.preventDefault();
-
-    // Reset previous error messages
     setErrors("");
 
     if (password !== confirmPassword) {
@@ -29,18 +43,10 @@ const SignUp = () => {
       return;
     }
 
-    let user = {
-      username: username,
-      email: email,
-      password: password,
-    };
+    let user = { username, email, password };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/user/register",
-        user
-      );
-
+      const response = await axios.post("http://localhost:8080/api/v1/user/register", user);
       if (response && response.data) {
         alert("Registration Success");
         window.location.href = "/login";
@@ -48,126 +54,114 @@ const SignUp = () => {
         setErrors("Registration failed. Please try again.");
       }
     } catch (err) {
-      if (err.response && err.response.data) {
-        setErrors(err.response.data.message);
-      } else {
-        setErrors("Registration failed. Please try again.");
-      }
+      setErrors(err?.response?.data?.message || "Registration failed. Please try again.");
     }
 
     resetForm();
   };
 
   return (
-    <>
-      <div className="h-[100vh] items-center flex justify-center px-5 lg:px-0">
-        <div className="max-w-screen-xl h-[550px] bg-white border shadow sm:rounded-lg flex justify-center flex-1">
-          <div className="flex-1 bg-violet-50 text-center hidden md:flex">
-            <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat">
-              <div className="flex justify-center items-center">
-                <img
-                  src={SignUpImage}
-                  alt="login"
-                  width={"500px"}
-                  draggable={false}
-                />
-              </div>
-            </div>
+    <div className="relative h-screen bg-blue-950 flex items-center justify-center px-5 lg:px-0 overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-[-150px] left-[-150px] w-[400px] h-[400px] bg-purple-700 rounded-full filter blur-3xl opacity-30 animate-blob1 z-0"></div>
+      <div className="absolute bottom-[-120px] left-[50%] translate-x-[-50%] w-[500px] h-[500px] bg-blue-600 rounded-full filter blur-3xl opacity-25 animate-blob3 z-0"></div>
+
+      {/* Card */}
+      <motion.div
+        className="w-full max-w-4xl bg-white border shadow-lg rounded-2xl flex justify-center flex-1 min-h-[520px] relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div className="flex-1 bg-blue-100 hidden md:flex items-center justify-center rounded-l-2xl" variants={imageVariants}>
+          <div className="p-6">
+          <img
+  src={SignUpImage}
+  alt="signup"
+  width="400px"
+  draggable={false}
+  className="object-contain rounded-2xl"
+/>
+
+          </div>
+        </motion.div>
+
+        <motion.div className="w-full md:w-1/2 p-6 sm:p-12 flex flex-col justify-center" variants={formVariants}>
+          <div className="text-center">
+            <h1 className="text-3xl font-extrabold text-blue-900">Sign Up</h1>
+            <p className="text-sm text-gray-500 mt-3">Hey! Enter your details to create your account</p>
           </div>
 
-          <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-            <div className=" flex flex-col items-center">
-              <div className="text-center">
-                <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
-                  Sign up
-                </h1>
-                <p className="text-[12px] text-gray-500 mt-4">
-                  Hey enter your details to create your account
-                </p>
-              </div>
-              <div className="w-full flex-1 mt-8">
-                <div className="mx-auto max-w-sm flex flex-col gap-4">
-                  <div>
-                    <input
-                      className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                      type="text"
-                      placeholder="Enter your name"
-                      id="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                    {errors.username && (
-                      <div className="text-red-500 text-xs">
-                        {errors.username}
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <input
-                      className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                      type="email"
-                      placeholder="Enter your email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && (
-                      <div className="text-red-500 text-xs">{errors.email}</div>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                      <input
-                        className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                        type="password"
-                        placeholder="Password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      {errors.password && (
-                        <div className="text-red-500 text-xs">
-                          {errors.password}
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <input
-                        className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                        type="password"
-                        placeholder="Confirm password"
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
-                      {errors.confirmPassword && (
-                        <div className="text-red-500 text-xs">
-                          {errors.confirmPassword}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                    onClick={sendData}
-                  >
-                    <span className="ml-3">Sign Up</span>
-                  </button>
-                  <p className="mt-6 text-xs text-gray-600 text-center">
-                    Already have an account? &nbsp;
-                    <Link to="/login">
-                      <span className="text-blue-900 font-semibold">
-                        Sign in
-                      </span>
-                    </Link>
-                  </p>
-                </div>
-              </div>
+          <form onSubmit={sendData} className="mt-8 flex flex-col gap-4 w-full max-w-sm mx-auto">
+            <input
+              className="w-full px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+              type="text"
+              placeholder="Enter your name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              className="w-full px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <input
+                className="px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <input
+                className="px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </div>
-          </div>
-        </div>
-      </div>
-    </>
+            {errors && <div className="text-red-500 text-xs text-center">{errors}</div>}
+            <motion.button
+              type="submit"
+              className="mt-4 bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-md transition duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Sign Up
+            </motion.button>
+            <p className="mt-4 text-xs text-gray-600 text-center">
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-900 font-semibold">
+                Sign In
+              </Link>
+            </p>
+          </form>
+        </motion.div>
+      </motion.div>
+
+      {/* Animations */}
+      <style>
+        {`
+          @keyframes blob1 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(30px, 20px) scale(1.1); }
+          }
+          @keyframes blob3 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(40px, -20px) scale(1.15); }
+          }
+          .animate-blob1 { animation: blob1 7s infinite ease-in-out; }
+          .animate-blob3 { animation: blob3 6s infinite ease-in-out; }
+        `}
+      </style>
+    </div>
   );
 };
 

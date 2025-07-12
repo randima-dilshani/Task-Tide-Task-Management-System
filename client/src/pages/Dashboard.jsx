@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Layout, Card, Row, Col, Flex, Progress } from "antd";
-import {
-  FaTasks,
-  FaCheckCircle,
-  FaSpinner,
-  FaClipboardList,
-} from "react-icons/fa";
+import { Layout, Row, Col } from "antd";
+import {FaTasks,FaCheckCircle,FaSpinner,FaClipboardList} from "react-icons/fa";
+import { motion } from "framer-motion";
 import Logo from "../components/Sidebar/Logo";
 import MenuList from "../components/Sidebar/MenuList";
 import DashBoardTasks from "../components/Tasks/DashBoardTasks";
@@ -17,28 +13,60 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    // Fetch tasks from the database
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8080/api/v1/task/getAllTasks"
-        ); // Adjust the URL based on your API endpoint
+        );
         setTasks(response.data);
       } catch (error) {
         // Handle error
       }
     };
-
     fetchTasks();
   }, []);
 
-  // Function to calculate the count of tasks for each status
   const countTasksByStatus = (status) => {
     return tasks.filter((task) => task.status === status).length;
   };
 
-  // Calculate the count of total tasks
   const totalTasks = tasks.length;
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
+    }),
+  };
+
+  const cardData = [
+    {
+      title: "TOTAL TASKS",
+      icon: <FaTasks />,
+      count: totalTasks,
+      bg: "bg-blue-800",
+    },
+    {
+      title: "COMPLETED TASKS",
+      icon: <FaCheckCircle />,
+      count: countTasksByStatus("Completed"),
+      bg: "bg-indigo-800",
+    },
+    {
+      title: "TASK IN PROGRESS",
+      icon: <FaSpinner />,
+      count: countTasksByStatus("Inprogress"),
+      bg: "bg-cyan-800",
+    },
+    {
+      title: "TODOS",
+      icon: <FaClipboardList />,
+      count: countTasksByStatus("Pending"),
+      bg: "bg-sky-800",
+    },
+  ];
 
   return (
     <Layout>
@@ -46,76 +74,33 @@ const Dashboard = () => {
         <Logo />
         <MenuList />
       </Sider>
+
       <Layout>
-        <Content className="p-6">
+        <Content className="p-6 bg-gray-100 min-h-screen">
           <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                title={
-                  <div className="flex items-center">
-                    <FaTasks className="text-white mr-2" />
-                    <span className="text-white">TOTAL TASKS</span>
+            {cardData.map((card, index) => (
+              <Col xs={24} sm={12} md={6} key={index}>
+                <motion.div
+                  className={`${card.bg} rounded-2xl shadow-lg text-white p-6 transition-transform hover:scale-105 hover:brightness-110`}
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <div className="flex items-center mb-2">
+                    <div className="text-2xl mr-2">{card.icon}</div>
+                    <h2 className="text-md font-semibold">{card.title}</h2>
                   </div>
-                }
-                bordered={false}
-                className="bg-[#1d4ed8] text-white"
-              >
-                <p style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {totalTasks}
-                </p>
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                title={
-                  <div className="flex items-center">
-                    <FaCheckCircle className="text-white mr-2" />
-                    <span className="text-white">COMPLETED TASKS</span>
-                  </div>
-                }
-                bordered={false}
-                className="bg-green-500 text-white"
-              >
-                <p style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {countTasksByStatus("Completed")}
-                </p>
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                title={
-                  <div className="flex items-center">
-                    <FaSpinner className="text-white mr-2" />
-                    <span className="text-white">TASK IN PROGRESS</span>
-                  </div>
-                }
-                bordered={false}
-                className="bg-yellow-500 text-white"
-              >
-                <p style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {countTasksByStatus("Inprogress")}
-                </p>
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card
-                title={
-                  <div className="flex items-center">
-                    <FaClipboardList className="text-white mr-2" />
-                    <span className="text-white">TODOS</span>
-                  </div>
-                }
-                bordered={false}
-                className="bg-red-500 text-white"
-              >
-                <p style={{ fontSize: "30px", fontWeight: "bold" }}>
-                  {countTasksByStatus("Pending")}
-                </p>
-              </Card>
-            </Col>
+                  <p className="text-3xl font-bold">{card.count}</p>
+                </motion.div>
+              </Col>
+            ))}
           </Row>
+
+          <div className="mt-8">
+            <DashBoardTasks />
+          </div>
         </Content>
-        <DashBoardTasks />
       </Layout>
     </Layout>
   );
