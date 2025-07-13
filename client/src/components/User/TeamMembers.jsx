@@ -34,6 +34,7 @@ const TeamMembers = () => {
       ),
       dataIndex: "username",
       key: "username",
+      width: 300,
     },
     {
       title: (
@@ -43,8 +44,9 @@ const TeamMembers = () => {
       ),
       dataIndex: "email",
       key: "email",
+      width: 450,
+      ellipsis: true,
     },
-    // Add more columns as needed
   ];
 
   return (
@@ -54,12 +56,16 @@ const TeamMembers = () => {
         <MenuList />
       </Sider>
       <Layout>
-        <Content style={{ padding: "20px" }}>
+        <Content
+          style={{
+            padding: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              width: 750,
               marginTop: "60px",
               marginBottom: "20px",
             }}
@@ -69,18 +75,31 @@ const TeamMembers = () => {
                 fontSize: "24px",
                 fontWeight: "bold",
                 marginBottom: "10px",
+                textAlign: "center",
               }}
             >
               Team Members
             </h1>
-          </div>
 
-          <Table
-            dataSource={users}
-            columns={columns}
-            loading={loading}
-            rowKey="_id"
-          />
+            <Table
+              dataSource={users}
+              columns={columns}
+              loading={loading}
+              rowKey="_id"
+              pagination={{ pageSize: 8, showSizeChanger: false }}
+              bordered={false}
+              style={{
+                borderRadius: "12px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+                overflow: "hidden",
+                backgroundColor: "#fff",
+              }}
+              rowClassName={() =>
+                "hover:bg-blue-50 transition-colors duration-300 cursor-pointer"
+              }
+              scroll={{ x: "100%" }}
+            />
+          </div>
         </Content>
       </Layout>
     </Layout>

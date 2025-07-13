@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Layout, Card, Row, Col, Table, message, Calendar, Tag, Tooltip } from "antd";
+import { Layout, Card, Row, Col, Table, message, Calendar, Tag, Tooltip,Progress } from "antd";
 import { FaCheckCircle, FaClock, FaSpinner, FaExclamationCircle } from "react-icons/fa";
 
 const { Content } = Layout;
@@ -117,6 +117,21 @@ const DashBoardTasks = () => {
     },
   ];
 
+  const totalTasks = tasks.length;
+  const completedCount = tasks.filter((t) => t.status === "Completed").length;
+  const inprogressCount = tasks.filter((t) => t.status === "Inprogress").length;
+  const pendingCount = tasks.filter((t) => t.status === "Pending").length;
+
+  const completedPercent = totalTasks
+    ? Math.round((completedCount / totalTasks) * 100)
+    : 0;
+  const inprogressPercent = totalTasks
+    ? Math.round((inprogressCount / totalTasks) * 100)
+    : 0;
+  const pendingPercent = totalTasks
+    ? Math.round((pendingCount / totalTasks) * 100)
+    : 0;
+
   return (
     <Layout>
       <Content style={{ padding: "20px" }}>
@@ -126,6 +141,7 @@ const DashBoardTasks = () => {
           </h1>
         </div>
         <Row gutter={[16, 16]}>
+          {/* Left side: Table */}
           <Col xs={24} sm={24} md={12} lg={15}>
             <Card
               title="Tasks Dashboard"
@@ -136,7 +152,7 @@ const DashBoardTasks = () => {
                 dataSource={tasks}
                 columns={columns}
                 rowKey="_id"
-                pagination={false}
+                pagination={{ pageSize: 6 }}
                 rowClassName={(record, index) =>
                   index % 2 === 0
                     ? "bg-gray-50 hover:bg-blue-50"
@@ -147,7 +163,53 @@ const DashBoardTasks = () => {
               />
             </Card>
           </Col>
+
+          {/* Right side: Two separate cards */}
           <Col xs={24} sm={24} md={12} lg={9}>
+            {/* Overview */}
+            <Card
+              title="Task Overview"
+              bordered={false}
+              className="shadow-lg rounded-xl mb-4"
+            >
+              <div className="flex justify-around items-center">
+                <div className="flex flex-col items-center">
+                  <Progress
+                    type="circle"
+                    percent={completedPercent}
+                    strokeColor="#22c55e"
+                    width={70}
+                  />
+                  <span className="mt-1 font-semibold text-xs text-green-600">
+                    Completed
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Progress
+                    type="circle"
+                    percent={inprogressPercent}
+                    strokeColor="#3b82f6"
+                    width={70}
+                  />
+                  <span className="mt-1 font-semibold text-xs text-blue-600">
+                    In Progress
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Progress
+                    type="circle"
+                    percent={pendingPercent}
+                    strokeColor="#f97316"
+                    width={70}
+                  />
+                  <span className="mt-1 font-semibold text-xs text-orange-600">
+                    Pending
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            {/* Calendar */}
             <Card
               title="Calendar"
               bordered={false}
