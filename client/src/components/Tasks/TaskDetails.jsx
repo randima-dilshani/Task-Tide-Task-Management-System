@@ -14,6 +14,7 @@ import {
   message,
   Spin,
   Input,
+  Radio,
 } from "antd";
 import {
   PlusOutlined,
@@ -22,8 +23,7 @@ import {
   BellOutlined,
   EyeOutlined,
   SearchOutlined,
-  ProfileOutlined,
-  FundOutlined
+  FundOutlined,
 } from "@ant-design/icons";
 import CreateTasks from "../Tasks/CreateTasks";
 import EditTask from "./EditTasks";
@@ -57,17 +57,28 @@ const TaskDetails = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMyTasks, setShowMyTasks] = useState(true);
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [showMyTasks]);
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/v1/task/getAllTasks");
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+
+      const url = showMyTasks
+        ? "http://localhost:8080/api/v1/task/getMyTasks"
+        : "http://localhost:8080/api/v1/task/getAllTasks";
+
+      const response = await axios.get(url, config);
       setTasks(response.data);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
+      message.error("Failed to fetch tasks");
     }
   };
 
@@ -75,7 +86,9 @@ const TaskDetails = () => {
 
   const handleDeleteTask = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/v1/task/deleteTask/${id}`);
+      const response = await axios.delete(
+        `http://localhost:8080/api/v1/task/deleteTask/${id}`
+      );
       if (response.status === 200) {
         setTasks(tasks.filter((task) => task._id !== id));
         message.success("Task deleted successfully");
@@ -105,8 +118,12 @@ const TaskDetails = () => {
   };
 
   const filteredTasks = tasks.filter((task) => {
-    const titleMatch = task.title?.toLowerCase().includes(searchTerm.toLowerCase());
-    const assignedMatch = task.user?.username?.toLowerCase().includes(searchTerm.toLowerCase());
+    const titleMatch = task.title
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const assignedMatch = task.user?.username
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
     return titleMatch || assignedMatch;
   });
 
@@ -128,8 +145,10 @@ const TaskDetails = () => {
           <Content className="p-6 bg-gray-50 min-h-screen">
             <div className="flex justify-between items-center mb-8 mt-16">
               <div className="flex items-center gap-3">
-               <FundOutlined style={{ fontSize: "28px", color: "#333" }} />
-<h1 className="text-3xl font-bold text-black-800 tracking-wide">Progress Board</h1>
+                <FundOutlined style={{ fontSize: "28px", color: "#333" }} />
+                <h1 className="text-3xl font-bold text-black-800 tracking-wide">
+                  Progress Board
+                </h1>
               </div>
 
               <div className="flex items-center space-x-4">
@@ -139,18 +158,53 @@ const TaskDetails = () => {
                   </Avatar>
                 </Badge>
                 <Button
-                  type="primary"
                   icon={<PlusOutlined />}
                   size="large"
                   onClick={toggleModal}
-                  className="shadow-md"
+                  style={{
+                    backgroundColor: "#1E3A8A",
+                    color: "#fff",
+                    border: "none",
+                  }}
+                  className="hover:scale-105 transition-transform duration-300"
                 >
                   Create Task
                 </Button>
               </div>
             </div>
 
-            {/* 🔍 Search bar */}
+            {/* My/All Tasks Toggle */}
+            <div className="mb-6 max-w-md">
+              <Radio.Group
+                value={showMyTasks ? "my" : "all"}
+                onChange={(e) => setShowMyTasks(e.target.value === "my")}
+                optionType="button"
+                buttonStyle="solid"
+              >
+                <Radio.Button
+                  value="my"
+                  style={{
+                    backgroundColor: showMyTasks ? "#1e2e5aff" : "#f0f0f0",
+                    color: showMyTasks ? "#fff" : "#000",
+                    borderColor: "#1E3A8A",
+                  }}
+                >
+                  My Tasks
+                </Radio.Button>
+                <Radio.Button
+                  value="all"
+                  style={{
+                    backgroundColor: !showMyTasks ? "#1E3A8A" : "#f0f0f0",
+                    color: !showMyTasks ? "#fff" : "#000",
+                    borderColor: "#1E3A8A",
+                  }}
+                >
+                  All Tasks
+                </Radio.Button>
+              </Radio.Group>
+            </div>
+
+            {/* Search */}
             <div className="mb-8 max-w-md">
               <Input
                 placeholder="Search by task title or assigned user"
@@ -177,7 +231,9 @@ const TaskDetails = () => {
                       title={
                         <span className="flex items-center gap-2 font-semibold text-lg">
                           <span
-                            className={`w-3 h-3 rounded-full inline-block ${TASK_TYPE[status.toLowerCase()]}`}
+                            className={`w-3 h-3 rounded-full inline-block ${
+                              TASK_TYPE[status.toLowerCase()]
+                            }`}
                           />
                           {status}
                         </span>
@@ -195,7 +251,9 @@ const TaskDetails = () => {
                       className="shadow-md"
                     >
                       {statusFilteredTasks.length === 0 && (
-                        <p className="text-gray-500 mt-6">No tasks in this category.</p>
+                        <p className="text-gray-500 mt-6">
+                          No tasks in this category.
+                        </p>
                       )}
                       {statusFilteredTasks.map((task, i) => (
                         <motion.div
@@ -217,7 +275,9 @@ const TaskDetails = () => {
                             <div>
                               <div className="flex items-center gap-2 text-lg font-semibold mb-1">
                                 <span
-                                  className={`w-3 h-3 rounded-full inline-block ${TASK_TYPE[status.toLowerCase()]}`}
+                                  className={`w-3 h-3 rounded-full inline-block ${
+                                    TASK_TYPE[status.toLowerCase()]
+                                  }`}
                                 />
                                 {task.title}
                               </div>
@@ -230,13 +290,15 @@ const TaskDetails = () => {
                               </div>
 
                               <div className="text-sm text-gray-600 mb-1">
-                                Due Date: {new Date(task.dueDate).toLocaleDateString()}
+                                Due Date:{" "}
+                                {new Date(task.dueDate).toLocaleDateString()}
                               </div>
 
                               <p className="text-gray-700">{task.description}</p>
 
                               <div className="text-xs text-gray-500 mt-3">
-                                Created: {new Date(task.createdAt).toLocaleDateString()}
+                                Created:{" "}
+                                {new Date(task.createdAt).toLocaleDateString()}
                               </div>
                             </div>
 
@@ -246,12 +308,18 @@ const TaskDetails = () => {
                                 onClick={() => handleViewTask(task._id)}
                                 className="transition-colors duration-200 hover:text-blue-600"
                               >
-                                <EyeOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
+                                <EyeOutlined
+                                  style={{ fontSize: "18px", color: "#6b7280" }}
+                                />
                               </Button>
 
                               <Button
                                 type="text"
-                                icon={<EditOutlined style={{ fontSize: "18px", color: "#6b7280" }} />}
+                                icon={
+                                  <EditOutlined
+                                    style={{ fontSize: "18px", color: "#6b7280" }}
+                                  />
+                                }
                                 onClick={() => handleEditButtonClick(task)}
                                 className="transition-colors duration-200 hover:text-green-600"
                               />
@@ -271,7 +339,9 @@ const TaskDetails = () => {
                                 <Button
                                   type="text"
                                   icon={
-                                    <DeleteOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
+                                    <DeleteOutlined
+                                      style={{ fontSize: "18px", color: "#6b7280" }}
+                                    />
                                   }
                                   className="transition-colors duration-200 hover:text-red-600"
                                 />

@@ -12,6 +12,7 @@ import ToDoTasks from "./components/Tasks/ToDoTasks";
 import TeamMembers from "./components/User/TeamMembers";
 import SpecificTask from "./components/Tasks/SpecificTask";
 import About from "./pages/About";
+import Profile from "./components/User/Profile";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/team" element={<TeamMembers />} />
       <Route path="/getTask/:taskId" element={<SpecificTask />} />
       <Route path="/about" element={<About />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

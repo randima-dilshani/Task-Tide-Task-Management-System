@@ -57,6 +57,17 @@ const GetAllTasks = async (req, res) => {
   }
 };
 
+// Get only logged-in user's tasks
+const GetMyTasks = async (req, res) => {
+  try {
+    const userId = req.auth.id;
+    const tasks = await TaskService.findAll({ user: userId }); // filter by user id
+    res.status(StatusCodes.OK).json(tasks);
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+  }
+};
+
 // Get a task by ID
 const GetTaskById = async (req, res) => {
   try {
@@ -135,4 +146,5 @@ module.exports = {
   UpdateTask,
   DeleteTask,
   getAllUsernames,
+  GetMyTasks,
 };

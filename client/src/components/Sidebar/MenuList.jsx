@@ -56,7 +56,7 @@ const MenuList = () => {
       label: "Team",
     },
     {
-      key: "#",
+      key: "/profile",
       icon: <FaUser />,
       label: "Profile",
     },
