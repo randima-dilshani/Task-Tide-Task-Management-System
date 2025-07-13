@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Layout, Card, Row, Col, Table, message, Calendar, Tag, Tooltip,Progress } from "antd";
-import { FaCheckCircle, FaClock, FaSpinner, FaExclamationCircle } from "react-icons/fa";
+import {
+  Layout,
+  Card,
+  Row,
+  Col,
+  Table,
+  message,
+  Calendar,
+  Tag,
+  Tooltip,
+  Progress,
+} from "antd";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaSpinner,
+  FaExclamationCircle,
+} from "react-icons/fa";
 
 const { Content } = Layout;
 
@@ -144,9 +160,9 @@ const DashBoardTasks = () => {
           {/* Left side: Table */}
           <Col xs={24} sm={24} md={12} lg={15}>
             <Card
-              title="Tasks Dashboard"
+              title={<span className="text-blue-700 font-bold text-lg">📋 Tasks Dashboard</span>}
               bordered={false}
-              className="shadow-lg rounded-xl"
+              className="shadow-lg rounded-xl bg-white"
             >
               <Table
                 dataSource={tasks}
@@ -166,11 +182,11 @@ const DashBoardTasks = () => {
 
           {/* Right side: Two separate cards */}
           <Col xs={24} sm={24} md={12} lg={9}>
-            {/* Overview */}
+            {/* Highlighted Overview */}
             <Card
-              title="Task Overview"
+              title={<span className="text-blue-700 font-bold text-lg">📊 Task Overview</span>}
               bordered={false}
-              className="shadow-lg rounded-xl mb-4"
+              className="shadow-lg rounded-xl mb-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50 border border-blue-100"
             >
               <div className="flex justify-around items-center">
                 <div className="flex flex-col items-center">
@@ -178,9 +194,9 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={completedPercent}
                     strokeColor="#22c55e"
-                    width={70}
+                    width={80}
                   />
-                  <span className="mt-1 font-semibold text-xs text-green-600">
+                  <span className="mt-2 font-semibold text-sm text-green-600">
                     Completed
                   </span>
                 </div>
@@ -189,9 +205,9 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={inprogressPercent}
                     strokeColor="#3b82f6"
-                    width={70}
+                    width={80}
                   />
-                  <span className="mt-1 font-semibold text-xs text-blue-600">
+                  <span className="mt-2 font-semibold text-sm text-blue-600">
                     In Progress
                   </span>
                 </div>
@@ -200,9 +216,9 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={pendingPercent}
                     strokeColor="#f97316"
-                    width={70}
+                    width={80}
                   />
-                  <span className="mt-1 font-semibold text-xs text-orange-600">
+                  <span className="mt-2 font-semibold text-sm text-orange-600">
                     Pending
                   </span>
                 </div>
@@ -211,10 +227,10 @@ const DashBoardTasks = () => {
 
             {/* Calendar */}
             <Card
-              title="Calendar"
+              title={<span className="text-blue-700 font-bold text-lg">📅 Calendar</span>}
               bordered={false}
               style={{ height: "360px", overflowY: "auto" }}
-              className="shadow-lg rounded-xl"
+              className="shadow-lg rounded-xl bg-gradient-to-br from-pink-50 via-white to-red-50 border border-pink-100"
             >
               <Calendar fullscreen={false} />
             </Card>

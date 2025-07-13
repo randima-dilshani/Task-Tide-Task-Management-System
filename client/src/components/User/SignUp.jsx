@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 import SignUpImage from "../../assets/images/task5.jpg";
 
 const containerVariants = {
@@ -24,49 +25,50 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState("");
 
   const resetForm = () => {
     setUsername("");
     setEmail("");
     setConfirmPassword("");
     setPassword("");
-    setErrors("");
   };
 
   const sendData = async (e) => {
     e.preventDefault();
-    setErrors("");
 
-    if (password !== confirmPassword) {
-      setErrors("Passwords do not match");
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
-    let user = { username, email, password };
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    const user = { username, email, password };
 
     try {
       const response = await axios.post("http://localhost:8080/api/v1/user/register", user);
       if (response && response.data) {
-        alert("Registration Success");
-        window.location.href = "/login";
+        toast.success("Registration Successful!");
+        resetForm();
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
       } else {
-        setErrors("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
     } catch (err) {
-      setErrors(err?.response?.data?.message || "Registration failed. Please try again.");
+      toast.error(err?.response?.data?.message || "Registration failed. Please try again.");
     }
-
-    resetForm();
   };
 
   return (
     <div className="relative h-screen bg-blue-950 flex items-center justify-center px-5 lg:px-0 overflow-hidden">
-      {/* Background blobs */}
       <div className="absolute top-[-150px] left-[-150px] w-[400px] h-[400px] bg-purple-700 rounded-full filter blur-3xl opacity-30 animate-blob1 z-0"></div>
       <div className="absolute bottom-[-120px] left-[50%] translate-x-[-50%] w-[500px] h-[500px] bg-blue-600 rounded-full filter blur-3xl opacity-25 animate-blob3 z-0"></div>
 
-      {/* Card */}
       <motion.div
         className="w-full max-w-4xl bg-white border shadow-lg rounded-2xl flex justify-center flex-1 min-h-[520px] relative z-10"
         variants={containerVariants}
@@ -75,14 +77,13 @@ const SignUp = () => {
       >
         <motion.div className="flex-1 bg-blue-100 hidden md:flex items-center justify-center rounded-l-2xl" variants={imageVariants}>
           <div className="p-6">
-          <img
-  src={SignUpImage}
-  alt="signup"
-  width="400px"
-  draggable={false}
-  className="object-contain rounded-2xl"
-/>
-
+            <img
+              src={SignUpImage}
+              alt="signup"
+              width="400px"
+              draggable={false}
+              className="object-contain rounded-2xl"
+            />
           </div>
         </motion.div>
 
@@ -127,7 +128,7 @@ const SignUp = () => {
                 required
               />
             </div>
-            {errors && <div className="text-red-500 text-xs text-center">{errors}</div>}
+
             <motion.button
               type="submit"
               className="mt-4 bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-md transition duration-300"
@@ -137,7 +138,7 @@ const SignUp = () => {
               Sign Up
             </motion.button>
             <p className="mt-4 text-xs text-gray-600 text-center">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link to="/login" className="text-blue-900 font-semibold">
                 Sign In
               </Link>

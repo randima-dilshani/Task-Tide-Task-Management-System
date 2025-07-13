@@ -11,6 +11,8 @@ import InProgressTasks from "./components/Tasks/InProgressTasks";
 import ToDoTasks from "./components/Tasks/ToDoTasks";
 import TeamMembers from "./components/User/TeamMembers";
 import SpecificTask from "./components/Tasks/SpecificTask";
+import About from "./pages/About";
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
       <Route path="/pendingtasks" element={<ToDoTasks />} />
       <Route path="/team" element={<TeamMembers />} />
       <Route path="/getTask/:taskId" element={<SpecificTask />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   );
 }

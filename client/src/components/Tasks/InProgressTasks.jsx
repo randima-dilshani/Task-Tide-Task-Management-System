@@ -117,7 +117,11 @@ const InProgressTasks = () => {
       <Layout>
         <Content className="p-6 bg-gray-100 min-h-screen">
           <div className="flex justify-between items-center mt-16 mb-6">
-            <h1 className="text-2xl font-bold">In Progress Tasks</h1>
+           <div className="px-6 py-3 rounded-xl shadow text-center" style={{ backgroundColor: "#fffbe6" }}>
+  <h1 className="text-2xl md:text-3xl font-bold text-yellow-800 tracking-wide flex items-center justify-center gap-2">
+    🔄 <span>In Progress Tasks</span>
+  </h1>
+</div>
             <div>
               <Button
                 icon={<AppstoreOutlined />}

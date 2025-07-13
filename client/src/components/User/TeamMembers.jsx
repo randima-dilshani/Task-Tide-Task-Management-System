@@ -70,16 +70,31 @@ const TeamMembers = () => {
               marginBottom: "20px",
             }}
           >
-            <h1
+            {/* Beautiful Heading without bullet */}
+            <div
               style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                marginBottom: "10px",
-                textAlign: "center",
+                backgroundColor: "#e0f2fe",
+                padding: "16px 24px",
+                borderRadius: "14px",
+                boxShadow: "0 8px 20px rgba(14, 165, 233, 0.3)",
+                marginBottom: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              Team Members
-            </h1>
+              <h1
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "700",
+                  color: "#0369a1",
+                  margin: 0,
+                  userSelect: "none",
+                }}
+              >
+                Team Members
+              </h1>
+            </div>
 
             <Table
               dataSource={users}

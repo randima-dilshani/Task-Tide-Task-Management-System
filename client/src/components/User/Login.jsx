@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import LoginImage from "../../assets/images/task3.avif";
 
 const containerVariants = {
@@ -20,19 +21,21 @@ const formVariants = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const resetForm = () => {
     setEmail("");
     setPassword("");
-    setError("");
+    setErrorMsg("");
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrorMsg("");
 
     const loginData = { email, password };
 
@@ -44,14 +47,15 @@ const Login = () => {
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
-        alert("Login Successful");
-        window.location.href = "/dashboard";
-      } else {
-        setError("Login failed. Please check your credentials.");
+        toast.success("Login Successful!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError("Password or Email is incorrect.");
+      setErrorMsg("Incorrect email or password");
+      toast.error("Incorrect email or password");
     }
 
     resetForm();
@@ -60,7 +64,7 @@ const Login = () => {
   return (
     <div className="relative h-screen bg-blue-950 flex items-center justify-center px-5 lg:px-0 overflow-hidden">
 
-      {/* Brighter Background Animated Blobs */}
+      {/* Animated Blobs */}
       <div className="absolute top-[-150px] left-[-150px] w-[400px] h-[400px] bg-purple-700 rounded-full filter blur-3xl opacity-40 animate-blob1 z-0"></div>
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-blue-800 rounded-full filter blur-3xl opacity-40 animate-blob2 z-0"></div>
       <div className="absolute bottom-[-120px] left-[50%] translate-x-[-50%] w-[500px] h-[500px] bg-blue-600 rounded-full filter blur-3xl opacity-35 animate-blob3 z-0"></div>
@@ -71,6 +75,7 @@ const Login = () => {
         initial="hidden"
         animate="visible"
       >
+        {/* Left Side Image */}
         <motion.div
           className="flex-1 bg-blue-100 hidden md:flex items-center justify-center rounded-l-2xl"
           variants={imageVariants}
@@ -86,6 +91,7 @@ const Login = () => {
           </div>
         </motion.div>
 
+        {/* Form Side */}
         <motion.div
           className="w-full md:w-1/2 p-6 sm:p-12 flex flex-col justify-center"
           variants={formVariants}
@@ -102,7 +108,9 @@ const Login = () => {
             className="mt-10 flex flex-col gap-4 w-full max-w-sm mx-auto"
           >
             <input
-              className="w-full px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+              className={`w-full px-5 py-3 rounded-md bg-gray-100 border ${
+                errorMsg ? "border-red-400" : "border-gray-200"
+              } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
               type="email"
               placeholder="Enter your email"
               required
@@ -111,7 +119,9 @@ const Login = () => {
             />
 
             <input
-              className="w-full px-5 py-3 rounded-md bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+              className={`w-full px-5 py-3 rounded-md bg-gray-100 border ${
+                errorMsg ? "border-red-400" : "border-gray-200"
+              } placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white`}
               type="password"
               placeholder="Password"
               required
@@ -119,7 +129,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            {error && <div className="text-red-500 text-xs">{error}</div>}
+            {errorMsg && <div className="text-red-500 text-xs">{errorMsg}</div>}
 
             <motion.button
               type="submit"
@@ -140,42 +150,24 @@ const Login = () => {
         </motion.div>
       </motion.div>
 
-      {/* Blob Animation Keyframes */}
+      {/* Blob Animation Styles */}
       <style>
         {`
           @keyframes blob1 {
-            0%, 100% {
-              transform: translate(0px, 0px) scale(1);
-            }
-            50% {
-              transform: translate(30px, 20px) scale(1.1);
-            }
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(30px, 20px) scale(1.1); }
           }
           @keyframes blob2 {
-            0%, 100% {
-              transform: translate(0px, 0px) scale(1);
-            }
-            50% {
-              transform: translate(-20px, 30px) scale(1.1);
-            }
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(-20px, 30px) scale(1.1); }
           }
           @keyframes blob3 {
-            0%, 100% {
-              transform: translate(0px, 0px) scale(1);
-            }
-            50% {
-              transform: translate(40px, -20px) scale(1.15);
-            }
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(40px, -20px) scale(1.15); }
           }
-          .animate-blob1 {
-            animation: blob1 7s infinite ease-in-out;
-          }
-          .animate-blob2 {
-            animation: blob2 8s infinite ease-in-out;
-          }
-          .animate-blob3 {
-            animation: blob3 6s infinite ease-in-out;
-          }
+          .animate-blob1 { animation: blob1 7s infinite ease-in-out; }
+          .animate-blob2 { animation: blob2 8s infinite ease-in-out; }
+          .animate-blob3 { animation: blob3 6s infinite ease-in-out; }
         `}
       </style>
     </div>

@@ -24,7 +24,7 @@ const LandingPage = () => {
           {/* Navigation */}
           <nav className="hidden md:flex space-x-10 text-lg md:text-xl tracking-wider text-white font-semibold">
             <Link to="/login" className="hover:text-blue-400 transition">Home</Link>
-            <Link to="/login" className="hover:text-blue-400 transition">About</Link>
+            <Link to="/about" className="hover:text-blue-400 transition">About</Link>
             <Link to="/login" className="hover:text-blue-400 transition">Features</Link>
             <Link to="/login" className="hover:text-blue-400 transition">How it Works</Link>
           </nav>

@@ -22,7 +22,7 @@ import { motion } from "framer-motion";
 const { Sider, Content } = Layout;
 
 const TASK_TYPE = {
-  todo: "bg-red-600",  // Changed to red for Pending
+  todo: "bg-red-600", // Changed to red for Pending
   inprogress: "bg-yellow-600",
   completed: "bg-green-600",
 };
@@ -139,15 +139,43 @@ const ToDoTasks = () => {
       </Sider>
       <Layout>
         <Content style={{ padding: "20px" }}>
+          {/* Styled Heading */}
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginTop: "60px",
+              marginTop: "40px",
+              marginBottom: "16px",
             }}
           >
-            <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>ToDo Tasks</h1>
+            <div
+              style={{
+                backgroundColor: "#fff0f0",
+                padding: "12px 24px",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(220, 38, 38, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <span
+                className="w-5 h-5 rounded-full inline-block"
+                style={{ backgroundColor: "#dc2626" }}
+              />
+              <h1
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#b91c1c",
+                  margin: 0,
+                }}
+              >
+                ToDo Tasks
+              </h1>
+            </div>
+
             <div>
               <Button
                 icon={<AppstoreOutlined />}
