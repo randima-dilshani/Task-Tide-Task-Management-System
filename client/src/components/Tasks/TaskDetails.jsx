@@ -13,6 +13,7 @@ import {
   Popconfirm,
   message,
   Spin,
+  Input,
 } from "antd";
 import {
   PlusOutlined,
@@ -20,6 +21,9 @@ import {
   DeleteOutlined,
   BellOutlined,
   EyeOutlined,
+  SearchOutlined,
+  ProfileOutlined,
+  FundOutlined
 } from "@ant-design/icons";
 import CreateTasks from "../Tasks/CreateTasks";
 import EditTask from "./EditTasks";
@@ -51,8 +55,8 @@ const TaskDetails = () => {
   const [tasks, setTasks] = useState([]);
   const [editTask, setEditTask] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [loadingTaskId, setLoadingTaskId] = useState(null);
-  const [isPageLoading, setIsPageLoading] = useState(false); // 🌟 NEW STATE
+  const [isPageLoading, setIsPageLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchTasks();
@@ -60,9 +64,7 @@ const TaskDetails = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/task/getAllTasks"
-      );
+      const response = await axios.get("http://localhost:8080/api/v1/task/getAllTasks");
       setTasks(response.data);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
@@ -73,9 +75,7 @@ const TaskDetails = () => {
 
   const handleDeleteTask = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/v1/task/deleteTask/${id}`
-      );
+      const response = await axios.delete(`http://localhost:8080/api/v1/task/deleteTask/${id}`);
       if (response.status === 200) {
         setTasks(tasks.filter((task) => task._id !== id));
         message.success("Task deleted successfully");
@@ -97,17 +97,21 @@ const TaskDetails = () => {
     setIsEditModalOpen(true);
   };
 
-  // 🌟 View with full page loader
   const handleViewTask = (taskId) => {
     setIsPageLoading(true);
     setTimeout(() => {
       window.location.href = `/getTask/${taskId}`;
-    }, 3500); // Simulated delay
+    }, 3500);
   };
+
+  const filteredTasks = tasks.filter((task) => {
+    const titleMatch = task.title?.toLowerCase().includes(searchTerm.toLowerCase());
+    const assignedMatch = task.user?.username?.toLowerCase().includes(searchTerm.toLowerCase());
+    return titleMatch || assignedMatch;
+  });
 
   return (
     <>
-      {/* 🌟 Full Page Loader Overlay */}
       {isPageLoading && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/80">
           <Spin size="large" tip="Loading task..." />
@@ -119,10 +123,15 @@ const TaskDetails = () => {
           <Logo />
           <MenuList />
         </Sider>
+
         <Layout>
           <Content className="p-6 bg-gray-50 min-h-screen">
             <div className="flex justify-between items-center mb-8 mt-16">
-              <h1 className="text-3xl font-extrabold">Tasks</h1>
+              <div className="flex items-center gap-3">
+               <FundOutlined style={{ fontSize: "28px", color: "#333" }} />
+<h1 className="text-3xl font-bold text-black-800 tracking-wide">Progress Board</h1>
+              </div>
+
               <div className="flex items-center space-x-4">
                 <Badge count={5}>
                   <Avatar size={40} className="bg-white shadow">
@@ -141,13 +150,24 @@ const TaskDetails = () => {
               </div>
             </div>
 
+            {/* 🔍 Search bar */}
+            <div className="mb-8 max-w-md">
+              <Input
+                placeholder="Search by task title or assigned user"
+                prefix={<SearchOutlined />}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                allowClear
+              />
+            </div>
+
             {open && (
               <CreateTasks open={open} setOpen={setOpen} getTask={fetchTasks} />
             )}
 
             <Row gutter={[24, 24]}>
-              {["Pending", "Inprogress", "Completed"].map((status, idx) => {
-                const filteredTasks = tasks.filter(
+              {["Pending", "Inprogress", "Completed"].map((status) => {
+                const statusFilteredTasks = filteredTasks.filter(
                   (task) => task.status.toLowerCase() === status.toLowerCase()
                 );
 
@@ -174,12 +194,10 @@ const TaskDetails = () => {
                       }}
                       className="shadow-md"
                     >
-                      {filteredTasks.length === 0 && (
-                        <p className="text-gray-500 mt-6">
-                          No tasks in this category.
-                        </p>
+                      {statusFilteredTasks.length === 0 && (
+                        <p className="text-gray-500 mt-6">No tasks in this category.</p>
                       )}
-                      {filteredTasks.map((task, i) => (
+                      {statusFilteredTasks.map((task, i) => (
                         <motion.div
                           key={task._id}
                           custom={i}
@@ -203,14 +221,22 @@ const TaskDetails = () => {
                                 />
                                 {task.title}
                               </div>
-                              <div className="text-sm text-gray-600 mb-2">
-                                Due Date:{" "}
-                                {new Date(task.dueDate).toLocaleDateString()}
+
+                              <div className="text-sm text-gray-600 mb-1">
+                                Assigned To:{" "}
+                                <span className="text-black font-medium">
+                                  {task.user?.username || "Unassigned"}
+                                </span>
                               </div>
+
+                              <div className="text-sm text-gray-600 mb-1">
+                                Due Date: {new Date(task.dueDate).toLocaleDateString()}
+                              </div>
+
                               <p className="text-gray-700">{task.description}</p>
+
                               <div className="text-xs text-gray-500 mt-3">
-                                Created:{" "}
-                                {new Date(task.createdAt).toLocaleDateString()}
+                                Created: {new Date(task.createdAt).toLocaleDateString()}
                               </div>
                             </div>
 
@@ -220,50 +246,36 @@ const TaskDetails = () => {
                                 onClick={() => handleViewTask(task._id)}
                                 className="transition-colors duration-200 hover:text-blue-600"
                               >
-                                <EyeOutlined
-                                  style={{
-                                    color: "#6b7280",
-                                    fontSize: "18px",
-                                  }}
-                                />
+                                <EyeOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
                               </Button>
 
                               <Button
                                 type="text"
-                                icon={
-                                  <EditOutlined
-                                    style={{
-                                      color: "#6b7280",
-                                      fontSize: "18px",
-                                    }}
-                                  />
-                                }
+                                icon={<EditOutlined style={{ fontSize: "18px", color: "#6b7280" }} />}
                                 onClick={() => handleEditButtonClick(task)}
                                 className="transition-colors duration-200 hover:text-green-600"
                               />
 
-<Popconfirm
-  title={<span className="text-base">Delete this task?</span>}
-  description={<span className="text-sm">Are you sure you want to proceed?</span>}
-  onConfirm={() => handleDeleteTask(task._id)}
-  okText="Yes"
-  cancelText="No"
-  overlayStyle={{ width: "220px" }}
->
-  <Button
-    type="text"
-    icon={
-      <DeleteOutlined
-        style={{
-          color: "#6b7280",
-          fontSize: "18px",
-        }}
-      />
-    }
-    className="transition-colors duration-200 hover:text-red-600"
-  />
-</Popconfirm>
-
+                              <Popconfirm
+                                title={<span className="text-base">Delete this task?</span>}
+                                description={
+                                  <span className="text-sm">
+                                    Are you sure you want to proceed?
+                                  </span>
+                                }
+                                onConfirm={() => handleDeleteTask(task._id)}
+                                okText="Yes"
+                                cancelText="No"
+                                overlayStyle={{ width: "220px" }}
+                              >
+                                <Button
+                                  type="text"
+                                  icon={
+                                    <DeleteOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
+                                  }
+                                  className="transition-colors duration-200 hover:text-red-600"
+                                />
+                              </Popconfirm>
                             </div>
                           </div>
                         </motion.div>
@@ -274,16 +286,16 @@ const TaskDetails = () => {
               })}
             </Row>
           </Content>
-        </Layout>
 
-        {editTask && (
-          <EditTask
-            open={isEditModalOpen}
-            setOpen={setIsEditModalOpen}
-            task={editTask}
-            handleEditTask={handleEditTask}
-          />
-        )}
+          {editTask && (
+            <EditTask
+              open={isEditModalOpen}
+              setOpen={setIsEditModalOpen}
+              task={editTask}
+              handleEditTask={handleEditTask}
+            />
+          )}
+        </Layout>
       </Layout>
     </>
   );

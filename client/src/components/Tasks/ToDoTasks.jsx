@@ -22,7 +22,7 @@ import { motion } from "framer-motion";
 const { Sider, Content } = Layout;
 
 const TASK_TYPE = {
-  todo: "bg-red-600", // Changed to red for Pending
+  todo: "bg-red-600",
   inprogress: "bg-yellow-600",
   completed: "bg-green-600",
 };
@@ -72,17 +72,6 @@ const ToDoTasks = () => {
       key: "description",
     },
     {
-      title: "",
-      dataIndex: "",
-      key: "statusIndicator",
-      render: () => (
-        <span
-          className={`rounded-full w-3 h-3 inline-block mr-2 ${TASK_TYPE.todo}`}
-          style={{ display: "flex" }}
-        />
-      ),
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
@@ -117,7 +106,6 @@ const ToDoTasks = () => {
     },
   ];
 
-  // Animation variants for cards and rows
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i) => ({
@@ -139,7 +127,6 @@ const ToDoTasks = () => {
       </Sider>
       <Layout>
         <Content style={{ padding: "20px" }}>
-          {/* Styled Heading */}
           <div
             style={{
               display: "flex",
@@ -172,7 +159,7 @@ const ToDoTasks = () => {
                   margin: 0,
                 }}
               >
-                ToDo Tasks
+                To Do Tasks
               </h1>
             </div>
 
@@ -226,7 +213,11 @@ const ToDoTasks = () => {
                           icon={
                             <motion.div
                               animate={{ rotate: 360 }}
-                              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                              transition={{
+                                repeat: Infinity,
+                                duration: 2,
+                                ease: "linear",
+                              }}
                               style={{ display: "inline-block" }}
                             >
                               <ClockCircleOutlined />
@@ -271,14 +262,6 @@ const ToDoTasks = () => {
               </div>
             </>
           )}
-          <div className="text-center mt-6">
-            <Pagination
-              current={currentPage}
-              pageSize={pageSize}
-              total={tasks.length}
-              onChange={handleChangePage}
-            />
-          </div>
         </Content>
       </Layout>
     </Layout>
