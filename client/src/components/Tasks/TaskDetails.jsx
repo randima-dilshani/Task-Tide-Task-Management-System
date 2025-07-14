@@ -159,29 +159,32 @@ const TaskDetails = () => {
             </div>
 
             {/* My/All Tasks Toggle */}
-            <div className="mb-5 max-w-xs sm:max-w-md">
+            <div className="mb-6 max-w-md">
               <Radio.Group
                 value={showMyTasks ? "my" : "all"}
                 onChange={(e) => setShowMyTasks(e.target.value === "my")}
                 optionType="button"
                 buttonStyle="solid"
-                className="w-full"
               >
                 <Radio.Button
                   value="my"
-                  className={`w-1/2 text-center text-sm sm:text-base ${
-                    showMyTasks ? "bg-blue-900 text-white" : "bg-gray-100 text-black"
-                  }`}
-                  style={{ borderColor: "#1E3A8A" }}
+                  style={{
+                    backgroundColor: showMyTasks ? "#1e2e5aff" : "#f0f0f0",
+                    color: showMyTasks ? "#fff" : "#000",
+                    borderColor: "#1E3A8A",
+                    minWidth: 120, // increase width here
+                  }}
                 >
                   My Tasks
                 </Radio.Button>
                 <Radio.Button
                   value="all"
-                  className={`w-1/2 text-center text-sm sm:text-base ${
-                    !showMyTasks ? "bg-blue-900 text-white" : "bg-gray-100 text-black"
-                  }`}
-                  style={{ borderColor: "#1E3A8A" }}
+                  style={{
+                    backgroundColor: !showMyTasks ? "#1E3A8A" : "#f0f0f0",
+                    color: !showMyTasks ? "#fff" : "#000",
+                    borderColor: "#1E3A8A",
+                    minWidth: 120, // increase width here
+                  }}
                 >
                   All Tasks
                 </Radio.Button>
@@ -212,14 +215,7 @@ const TaskDetails = () => {
                 );
 
                 return (
-                  <Col
-                    xs={24}
-                    sm={24}
-                    md={12}
-                    lg={8}
-                    key={status}
-                    className="mb-4"
-                  >
+                  <Col xs={24} sm={24} md={12} lg={8} key={status} className="mb-4">
                     <Card
                       title={
                         <span className="flex items-center gap-2 font-semibold text-lg">
@@ -270,7 +266,9 @@ const TaskDetails = () => {
                                     TASK_TYPE[status.toLowerCase()]
                                   }`}
                                 />
-                                <span className="truncate">{task.title}</span>
+                                <span className="break-words font-semibold text-lg">
+                                  {task.title}
+                                </span>
                               </div>
 
                               <div className="text-sm text-gray-600 mb-1 truncate">
@@ -280,14 +278,19 @@ const TaskDetails = () => {
                                 </span>
                               </div>
 
+                              <div className="text-sm text-gray-600 mb-1 truncate">
+                                Created By:{" "}
+                                <span className="text-black font-medium truncate">
+                                  {task.createdBy?.username || "Unknown"}
+                                </span>
+                              </div>
+
                               <div className="text-sm text-gray-600 mb-1">
                                 Due Date:{" "}
                                 {new Date(task.dueDate).toLocaleDateString()}
                               </div>
 
-                              <p className="text-gray-700 line-clamp-3">
-                                {task.description}
-                              </p>
+                              <p className="text-gray-700 line-clamp-3">{task.description}</p>
 
                               <div className="text-xs text-gray-500 mt-3">
                                 Created:{" "}
@@ -310,9 +313,7 @@ const TaskDetails = () => {
                               <Button
                                 type="text"
                                 icon={
-                                  <EditOutlined
-                                    style={{ fontSize: "18px", color: "#6b7280" }}
-                                  />
+                                  <EditOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
                                 }
                                 onClick={() => handleEditButtonClick(task)}
                                 className="transition-colors duration-200 hover:text-green-600"
@@ -334,9 +335,7 @@ const TaskDetails = () => {
                                 <Button
                                   type="text"
                                   icon={
-                                    <DeleteOutlined
-                                      style={{ fontSize: "18px", color: "#6b7280" }}
-                                    />
+                                    <DeleteOutlined style={{ fontSize: "18px", color: "#6b7280" }} />
                                   }
                                   className="transition-colors duration-200 hover:text-red-600"
                                   aria-label="Delete Task"

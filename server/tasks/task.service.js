@@ -6,7 +6,8 @@ const save = async (task, session) => {
 
 const findAll = async (queryObj = {}) => {
   return await Task.find(queryObj)
-    .populate("user", "username name") // populate user field with username and name only
+    .populate("user", "username name")       // populate assigned user
+    .populate("createdBy", "username name")  // populate creator
     .sort({ createdAt: -1 });
 };
 

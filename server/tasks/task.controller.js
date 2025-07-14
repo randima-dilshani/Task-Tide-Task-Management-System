@@ -20,6 +20,7 @@ const CreateTask = async (req, res) => {
       status: status,
       dueDate: dueDate,
       user: user,
+      createdBy: req.auth.id, 
     };
 
     // Create a new task instance with the constructed task data
@@ -61,12 +62,19 @@ const GetAllTasks = async (req, res) => {
 const GetMyTasks = async (req, res) => {
   try {
     const userId = req.auth.id;
-    const tasks = await TaskService.findAll({ user: userId }); // filter by user id
+
+    const tasks = await Task.find({ user: userId })
+      .populate("createdBy", "username")  // populate creator's username
+      .populate("user", "username");      // populate assigned user's username (optional)
+
     res.status(StatusCodes.OK).json(tasks);
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 };
+
 
 // Get a task by ID
 const GetTaskById = async (req, res) => {

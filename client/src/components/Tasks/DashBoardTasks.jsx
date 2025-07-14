@@ -3,6 +3,7 @@ import axios from "axios";
 import { Layout,Card,Row,Col,Table,message,Calendar,Tag,Tooltip,Progress,} from "antd";
 import { FaCheckCircle, FaClock, FaSpinner,FaExclamationCircle,} from "react-icons/fa";
 
+
 const { Content } = Layout;
 
 const DashBoardTasks = () => {
@@ -73,12 +74,24 @@ const DashBoardTasks = () => {
       title: <span style={{ whiteSpace: "nowrap" }}>Title</span>,
       dataIndex: "title",
       key: "title",
-      // responsive: true, // AntD v4.16+ has responsive prop, optional here
     },
     {
       title: <span style={{ whiteSpace: "nowrap" }}>Description</span>,
       dataIndex: "description",
       key: "description",
+      render: (text) => (
+        <div
+          style={{
+            maxWidth: 250, // limit width
+            whiteSpace: "normal", // allow wrap
+            wordWrap: "break-word",
+            overflowWrap: "break-word",
+          }}
+          title={text} // tooltip with full text
+        >
+          {text}
+        </div>
+      ),
     },
     {
       title: <span style={{ whiteSpace: "nowrap" }}>Due Date</span>,
@@ -153,7 +166,9 @@ const DashBoardTasks = () => {
           >
             <Card
               title={
-                <span className="text-blue-700 font-bold text-lg">📋 Tasks Dashboard</span>
+                <span className="text-blue-700 font-bold text-lg">
+                  📋 Tasks Dashboard
+                </span>
               }
               bordered={false}
               className="shadow-lg rounded-xl bg-white"
@@ -171,7 +186,7 @@ const DashBoardTasks = () => {
                 }
                 bordered={false}
                 className="modern-table"
-                scroll={{ x: "max-content" }} // enable horizontal scroll on small devices
+                // removed horizontal scroll here!
                 size="middle"
               />
             </Card>
@@ -182,7 +197,9 @@ const DashBoardTasks = () => {
             {/* Highlighted Overview */}
             <Card
               title={
-                <span className="text-blue-700 font-bold text-lg">📊 Task Overview</span>
+                <span className="text-blue-700 font-bold text-lg">
+                  📊 Task Overview
+                </span>
               }
               bordered={false}
               className="shadow-lg rounded-xl mb-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50 border border-blue-100"
@@ -193,7 +210,13 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={completedPercent}
                     strokeColor="#22c55e"
-                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80} 
+                    width={
+                      isNaN(window.innerWidth)
+                        ? 80
+                        : window.innerWidth < 640
+                        ? 60
+                        : 80
+                    }
                   />
                   <span className="mt-2 font-semibold text-sm text-green-600">
                     Completed
@@ -204,7 +227,13 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={inprogressPercent}
                     strokeColor="#3b82f6"
-                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80}
+                    width={
+                      isNaN(window.innerWidth)
+                        ? 80
+                        : window.innerWidth < 640
+                        ? 60
+                        : 80
+                    }
                   />
                   <span className="mt-2 font-semibold text-sm text-blue-600">
                     In Progress
@@ -215,7 +244,13 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={pendingPercent}
                     strokeColor="#f97316"
-                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80}
+                    width={
+                      isNaN(window.innerWidth)
+                        ? 80
+                        : window.innerWidth < 640
+                        ? 60
+                        : 80
+                    }
                   />
                   <span className="mt-2 font-semibold text-sm text-orange-600">
                     Pending

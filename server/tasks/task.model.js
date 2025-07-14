@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const TaskSchema = mongoose.Schema(
   {
     title: {
@@ -25,6 +26,11 @@ const TaskSchema = mongoose.Schema(
       ref: "User",
       required: [false, "User is required"],
     },
+    createdBy: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",
+  required: true,
+}
   },
   { timestamps: true }
 );

@@ -5,7 +5,7 @@ const { authorize } = require("../auth/auth.middleware");
 const TaskRouter = express.Router();
 
 // Route for creating a task
-TaskRouter.post("/createTask", taskController.CreateTask);
+TaskRouter.post("/createTask", authorize(), taskController.CreateTask);
 
 // Route for getting all tasks
 TaskRouter.get("/getAllTasks", taskController.GetAllTasks);

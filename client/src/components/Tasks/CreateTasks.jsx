@@ -26,7 +26,7 @@ const CreateTaskForm = ({ open, setOpen, getTask }) => {
         label: user.username,
         value: user._id,
       }));
-      setUsers(users); // Set the users state with fetched data
+      setUsers(users);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -38,34 +38,41 @@ const CreateTaskForm = ({ open, setOpen, getTask }) => {
       const values = form.getFieldsValue();
       console.log("Form values:", values);
 
+      const token = localStorage.getItem("token"); // Get token from localStorage
+
       const response = await axios.post(
         "http://localhost:8080/api/v1/task/createTask",
         {
           ...values,
           dueDate: values.dueDate.format("YYYY-MM-DD"),
           assignedDate: today,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,  // <-- Attach token here
+          },
         }
       );
       console.log("Task created:", response.data);
 
-      form.resetFields(); 
-      setOpen(false); 
-      getTask(); 
+      form.resetFields();
+      setOpen(false);
+      getTask();
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
 
   const handleCancel = () => {
-    form.resetFields(); 
-    setOpen(false); 
+    form.resetFields();
+    setOpen(false);
   };
 
   return (
     <Modal
       title={<span style={{ fontWeight: "bold" }}>ADD TASK</span>}
       visible={open}
-      onOk={handleSubmit}   
+      onOk={handleSubmit}
       onCancel={handleCancel}
       okText="Submit"
       cancelText="Cancel"
