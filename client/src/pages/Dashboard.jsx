@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../util/axios";  
 import { Layout, Row, Col } from "antd";
-import {FaTasks,FaCheckCircle,FaSpinner,FaClipboardList} from "react-icons/fa";
+import { FaTasks, FaCheckCircle, FaSpinner, FaClipboardList } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Logo from "../components/Sidebar/Logo";
 import MenuList from "../components/Sidebar/MenuList";
@@ -15,12 +15,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/task/getAllTasks"
-        );
+        const response = await api.get("/task/getAllTasks");  // <-- use api instance here
         setTasks(response.data);
       } catch (error) {
-        // Handle error
+        console.error("Failed to fetch tasks:", error);
       }
     };
     fetchTasks();

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Card, Row, Col, Button, Table, Pagination, Tag,} from "antd";
-import { AppstoreOutlined, UnorderedListOutlined, SyncOutlined,} from "@ant-design/icons";
+import { Layout, Card, Row, Col, Button, Table, Pagination, Tag } from "antd";
+import {
+  AppstoreOutlined,
+  UnorderedListOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 import Logo from "../Sidebar/Logo";
 import MenuList from "../Sidebar/MenuList";
-import axios from "axios";
+import axios from "../../util/axios";  
 import { motion } from "framer-motion";
 
 const { Sider, Content } = Layout;
@@ -32,9 +36,7 @@ const InProgressTasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/task/getAllTasks"
-        );
+        const response = await axios.get("/task/getAllTasks");
         const inprogressTasks = response.data.filter(
           (task) => task.status === "Inprogress"
         );
@@ -104,11 +106,14 @@ const InProgressTasks = () => {
       <Layout>
         <Content className="p-6 bg-gray-100 min-h-screen">
           <div className="flex justify-between items-center mt-16 mb-6">
-           <div className="px-6 py-3 rounded-xl shadow text-center" style={{ backgroundColor: "#fffbe6" }}>
-  <h1 className="text-2xl md:text-3xl font-bold text-yellow-800 tracking-wide flex items-center justify-center gap-2">
-    🔄 <span>All In Progress Tasks</span>
-  </h1>
-</div>
+            <div
+              className="px-6 py-3 rounded-xl shadow text-center"
+              style={{ backgroundColor: "#fffbe6" }}
+            >
+              <h1 className="text-2xl md:text-3xl font-bold text-yellow-800 tracking-wide flex items-center justify-center gap-2">
+                🔄 <span>All In Progress Tasks</span>
+              </h1>
+            </div>
             <div>
               <Button
                 icon={<AppstoreOutlined />}

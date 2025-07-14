@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../util/axios";  
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import SignUpImage from "../../assets/images/task5.jpg";
@@ -51,12 +51,12 @@ const SignUp = () => {
     const user = { username, email, password };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/user/register", user);
+      const response = await api.post("/user/register", user);  // <-- use axios instance here
       if (response && response.data) {
         toast.success("Registration Successful!");
         resetForm();
         setTimeout(() => {
-          window.location.href = "/login";
+          navigate("/login");
         }, 1500);
       } else {
         toast.error("Registration failed. Please try again.");
@@ -69,7 +69,7 @@ const SignUp = () => {
   return (
     <div className="relative h-screen bg-blue-950 flex items-center justify-center px-4 sm:px-5 lg:px-0 overflow-hidden">
 
-      {/* 🔙 Back Button */}
+      {/* Back Button */}
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-4 sm:left-8 bg-blue-800 bg-opacity-30 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-blue-400 hover:bg-blue-700 hover:bg-opacity-50 transition-all duration-300 text-xs sm:text-sm z-20 shadow-md"

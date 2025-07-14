@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "../../util/axios";
 import { Layout,Card,Row,Col,Button,Table,Pagination,Tag,} from "antd";
 import { AppstoreOutlined, UnorderedListOutlined, CheckCircleOutlined,} from "@ant-design/icons";
 import Logo from "../Sidebar/Logo";
 import MenuList from "../Sidebar/MenuList";
-import axios from "axios";
 import { motion } from "framer-motion";
 
 const { Sider, Content } = Layout;
@@ -31,9 +31,9 @@ const CompletedTasks = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/task/getAllTasks"
-      );
+     const response = await axios.get("/task/getAllTasks");
+     console.log(import.meta.env.VITE_API_BASE_URL);
+
       const completedTasks = response.data.filter(
         (task) => task.status === "Completed"
       );

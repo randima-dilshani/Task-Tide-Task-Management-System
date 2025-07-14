@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Layout, Table } from "antd";
 import Logo from "../Sidebar/Logo";
 import MenuList from "../Sidebar/MenuList";
-import axios from "axios";
+import api from "../../util/axios";  
 
 const { Sider, Content } = Layout;
 
@@ -16,9 +16,7 @@ const TeamMembers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/user/getallusers"
-      );
+      const response = await api.get("/user/getallusers");  // <-- use api instance
       setUsers(response.data.users);
       setLoading(false);
     } catch (error) {

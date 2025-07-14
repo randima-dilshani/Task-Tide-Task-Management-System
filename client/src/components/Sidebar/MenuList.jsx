@@ -8,6 +8,7 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaTasks, FaUser, FaUsers } from "react-icons/fa";
 import { MdTaskAlt, MdOutlinePendingActions } from "react-icons/md";
+import api from "../../util/axios";  
 
 const MenuList = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const MenuList = () => {
 
   const [selectedKeys, setSelectedKeys] = useState([location.pathname]);
 
-  // Add state to track window width for responsiveness
+  // Track window width for responsiveness
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -23,7 +24,6 @@ const MenuList = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    // Handler to update windowWidth state on resize
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
 
@@ -36,15 +36,12 @@ const MenuList = () => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
 
-        const response = await fetch("http://localhost:8080/api/v1/user/profile", {
+        // Use axios instance here
+        const response = await api.get("/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (!response.ok) throw new Error("Failed to fetch user profile");
-
-        const userData = await response.json();
-
-        localStorage.setItem("userProfile", JSON.stringify(userData));
+        localStorage.setItem("userProfile", JSON.stringify(response.data));
         setSelectedKeys([e.key]);
         navigate(e.key);
       } catch (error) {
@@ -99,8 +96,7 @@ const MenuList = () => {
     },
   ];
 
-  // Change menu mode based on screen width (inline for desktop, vertical for mobile)
-  const isMobile = windowWidth < 768; 
+  const isMobile = windowWidth < 768;
   return (
     <Menu
       theme="dark"
@@ -109,7 +105,7 @@ const MenuList = () => {
       onClick={handleMenuSelect}
       items={menuItems}
       mode={isMobile ? "vertical" : "inline"}
-      inlineCollapsed={isMobile} // Collapse inline menu on mobile for cleaner look
+      inlineCollapsed={isMobile}
       style={{ height: "100%", borderRight: 0 }}
     />
   );

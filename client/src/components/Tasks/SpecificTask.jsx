@@ -3,7 +3,7 @@ import { Layout, Button } from "antd";
 import MenuList from "../Sidebar/MenuList";
 import Logo from "../Sidebar/Logo";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../util/axios"; 
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import TaskImage from "../../assets/images/task.jpeg";
 
@@ -25,9 +25,7 @@ const SpecificTask = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8080/api/v1/task/getTask/${taskId}`
-        );
+        const response = await axios.get(`/task/getTask/${taskId}`);
         const taskData = response.data;
         setTitle(taskData.title);
         setDescription(taskData.description);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../util/axios";
 import MenuList from "../Sidebar/MenuList";
 import Logo from "../Sidebar/Logo";
 import { Layout, Button, Card, Row, Col, Avatar, Badge, Popconfirm, message, Spin, Input, Radio,} from "antd";
@@ -49,9 +49,7 @@ const TaskDetails = () => {
         headers: { Authorization: `Bearer ${token}` },
       };
 
-      const url = showMyTasks
-        ? "http://localhost:8080/api/v1/task/getMyTasks"
-        : "http://localhost:8080/api/v1/task/getAllTasks";
+      const url = showMyTasks ? "/task/getMyTasks" : "/task/getAllTasks";
 
       const response = await axios.get(url, config);
       setTasks(response.data);
@@ -65,9 +63,7 @@ const TaskDetails = () => {
 
   const handleDeleteTask = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/v1/task/deleteTask/${id}`
-      );
+      const response = await axios.delete(`/task/deleteTask/${id}`);
       if (response.status === 200) {
         setTasks(tasks.filter((task) => task._id !== id));
         message.success("Task deleted successfully");
@@ -115,7 +111,6 @@ const TaskDetails = () => {
       )}
 
       <Layout>
-        {/* Responsive Sider */}
         <Sider
           breakpoint="md"
           collapsedWidth="0"
@@ -172,7 +167,7 @@ const TaskDetails = () => {
                     backgroundColor: showMyTasks ? "#1e2e5aff" : "#f0f0f0",
                     color: showMyTasks ? "#fff" : "#000",
                     borderColor: "#1E3A8A",
-                    minWidth: 120, // increase width here
+                    minWidth: 120,
                   }}
                 >
                   My Tasks
@@ -183,7 +178,7 @@ const TaskDetails = () => {
                     backgroundColor: !showMyTasks ? "#1E3A8A" : "#f0f0f0",
                     color: !showMyTasks ? "#fff" : "#000",
                     borderColor: "#1E3A8A",
-                    minWidth: 120, // increase width here
+                    minWidth: 120,
                   }}
                 >
                   All Tasks
@@ -359,6 +354,10 @@ const TaskDetails = () => {
               task={editTask}
               handleEditTask={handleEditTask}
             />
+          )}
+
+          {open && (
+            <CreateTasks open={open} setOpen={setOpen} getTask={fetchTasks} />
           )}
         </Layout>
       </Layout>

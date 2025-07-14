@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../util/axios"; 
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -26,7 +26,6 @@ const formVariants = {
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -44,10 +43,7 @@ const Login = () => {
     const loginData = { email, password };
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        loginData
-      );
+      const response = await axios.post("/auth/login", loginData); // ✅ Updated URL
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
@@ -68,7 +64,7 @@ const Login = () => {
   return (
     <div className="relative h-screen bg-blue-950 flex items-center justify-center px-4 sm:px-5 lg:px-0 overflow-hidden">
 
-      {/* 🔙 Back Button - Beautiful version */}
+      {/* 🔙 Back Button */}
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-4 sm:left-8 bg-blue-800 bg-opacity-30 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-blue-400 hover:bg-blue-700 hover:bg-opacity-50 transition-all duration-300 text-xs sm:text-sm z-20 shadow-md"
@@ -76,7 +72,7 @@ const Login = () => {
         ← Back to Home
       </button>
 
-      {/* Animated Blobs */}
+      {/* Blobs */}
       <div className="absolute top-[-120px] left-[-120px] w-64 h-64 sm:w-[400px] sm:h-[400px] bg-purple-700 rounded-full filter blur-3xl opacity-40 animate-blob1 z-0"></div>
       <div className="absolute top-[-80px] right-[-80px] w-48 h-48 sm:w-[300px] sm:h-[300px] bg-blue-800 rounded-full filter blur-3xl opacity-40 animate-blob2 z-0"></div>
       <div className="absolute bottom-[-100px] left-[50%] translate-x-[-50%] w-80 h-80 sm:w-[500px] sm:h-[500px] bg-blue-600 rounded-full filter blur-3xl opacity-35 animate-blob3 z-0"></div>
@@ -87,7 +83,6 @@ const Login = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Left Side Image */}
         <motion.div
           className="hidden md:flex flex-1 bg-blue-100 items-center justify-center rounded-l-2xl"
           variants={imageVariants}
@@ -103,7 +98,6 @@ const Login = () => {
           </div>
         </motion.div>
 
-        {/* Form Side */}
         <motion.div
           className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center relative"
           variants={formVariants}
@@ -166,7 +160,7 @@ const Login = () => {
         </motion.div>
       </motion.div>
 
-      {/* Blob Animation Styles */}
+      {/* Blob Animations */}
       <style>
         {`
           @keyframes blob1 {

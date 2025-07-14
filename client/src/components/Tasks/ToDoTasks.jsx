@@ -3,7 +3,7 @@ import { Layout, Card, Row, Col, Button, Table, Pagination, Tag,} from "antd";
 import { AppstoreOutlined, UnorderedListOutlined, ClockCircleOutlined,} from "@ant-design/icons";
 import Logo from "../Sidebar/Logo";
 import MenuList from "../Sidebar/MenuList";
-import axios from "axios";
+import api from "../../util/axios";  // import your axios instance here
 import { motion } from "framer-motion";
 
 const { Sider, Content } = Layout;
@@ -32,9 +32,8 @@ const ToDoTasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/v1/task/getAllTasks"
-        );
+        // Using axiosInstance with baseURL from env variable
+        const response = await api.get("/task/getAllTasks");
         const pendingTasks = response.data.filter(
           (task) => task.status === "Pending"
         );
@@ -146,7 +145,7 @@ const ToDoTasks = () => {
                   margin: 0,
                 }}
               >
-               All To Do Tasks
+                All To Do Tasks
               </h1>
             </div>
 
