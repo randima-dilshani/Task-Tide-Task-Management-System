@@ -3,6 +3,7 @@
 Welcome to **Task Tide**, a beautiful and efficient full-stack task management app designed to help individuals and teams **stay organized, productive, and on track**. With intuitive design, real-time feedback, and smooth animations, Task Tide offers a seamless experience from sign-up to task completion.
 
 ---
+> 🌐 **Live Demo:** : https://task-tide-tasks-management-system.vercel.app/
 
 ## 🖼️ Overview
 
@@ -26,21 +27,21 @@ Welcome to **Task Tide**, a beautiful and efficient full-stack task management a
 
 ---
 
-🚀 Local Setup Instructions
+## 🚀 Local Setup Instructions
 
-1. 📦 Clone the Repository
+## 1. 📦 Clone the Repository
 
 git clone https://github.com/randima-dilshani/Task-Tide-Task-Management-System.git
 
 cd task-tide
 
-2. 🔁Backend Setup
+## 2. 🔁 Backend Setup
 
 cd task-api
 
 npm install
 
-📄 Create .env file inside task-api/ directory:
+## 📄 Create .env file inside task-api/ directory:
 
 PORT=8080
 MONGO_URI=your_mongodb_connection_url
@@ -49,3 +50,23 @@ JWT_SECRET=your_jwt_secret
 ▶️ Start the server:
 
 npm run dev
+
+## 3. 💻 Frontend Setup
+
+cd client
+
+npm install
+
+✏️ Configure Axios (client/src/util/axios.js):
+
+const axiosInstance = axios.create({
+  baseURL: "https://task-tide-task-management-system-production.up.railway.app/", 
+});
+
+▶️ Start the frontend:
+
+npm run dev
+
+## ✅ Testing
+
+npm run test
