@@ -2,29 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MenuList from "../Sidebar/MenuList";
 import Logo from "../Sidebar/Logo";
-import {
-  Layout,
-  Button,
-  Card,
-  Row,
-  Col,
-  Avatar,
-  Badge,
-  Popconfirm,
-  message,
-  Spin,
-  Input,
-  Radio,
-} from "antd";
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  BellOutlined,
-  EyeOutlined,
-  SearchOutlined,
-  FundOutlined,
-} from "@ant-design/icons";
+import { Layout, Button, Card, Row, Col, Avatar, Badge, Popconfirm, message, Spin, Input, Radio,} from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined, BellOutlined, EyeOutlined, SearchOutlined, FundOutlined } from "@ant-design/icons";
 import CreateTasks from "../Tasks/CreateTasks";
 import EditTask from "./EditTasks";
 import { motion } from "framer-motion";

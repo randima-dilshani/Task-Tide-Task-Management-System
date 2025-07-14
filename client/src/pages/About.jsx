@@ -7,11 +7,11 @@ const About = () => {
   return (
     <div className="relative min-h-screen bg-gray-950 text-white px-6 py-16 lg:py-24 flex flex-col items-center justify-center overflow-hidden">
 
-      {/* 🎨 Background Blobs */}
+      {/* Background Blobs */}
       <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 rounded-full filter blur-3xl opacity-20 z-0" />
       <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full filter blur-3xl opacity-20 z-0" />
 
-      {/* 🧭 Top Heading */}
+      {/* Top Heading */}
       <div className="relative z-10 text-center mb-12 max-w-3xl">
         <h2 className="text-3xl md:text-4xl font-bold text-blue-400">About Us</h2>
         <p className="text-gray-300 text-lg mt-2 font-medium">
@@ -19,14 +19,14 @@ const About = () => {
         </p>
       </div>
 
-      {/* 📦 Content Section */}
+      {/* Content Section */}
       <motion.div
         className="max-w-6xl w-full flex flex-col lg:flex-row items-center gap-12 relative z-10"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
       >
-        {/* 📷 Left: Image */}
+        {/* Left: Image */}
         <motion.div
           className="w-full lg:w-1/2 flex justify-center"
           initial={{ opacity: 0, x: -40 }}
@@ -40,7 +40,7 @@ const About = () => {
           />
         </motion.div>
 
-        {/* 📄 Right: Text */}
+        {/* Right: Text */}
         <motion.div
           className="w-full lg:w-1/2 space-y-6"
           initial={{ opacity: 0, x: 40 }}
@@ -70,7 +70,7 @@ const About = () => {
         </motion.div>
       </motion.div>
 
-      {/* 🌐 Floating Blob Animation */}
+      {/* Floating Blob Animation */}
       <motion.div
         className="absolute w-16 h-16 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-full opacity-30 blur-2xl z-10"
         initial={{ x: "-10%", y: "100%" }}

@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Layout,
-  Card,
-  Row,
-  Col,
-  Table,
-  message,
-  Calendar,
-  Tag,
-  Tooltip,
-  Progress,
-} from "antd";
-import {
-  FaCheckCircle,
-  FaClock,
-  FaSpinner,
-  FaExclamationCircle,
-} from "react-icons/fa";
+import { Layout,Card,Row,Col,Table,message,Calendar,Tag,Tooltip,Progress,} from "antd";
+import { FaCheckCircle, FaClock, FaSpinner,FaExclamationCircle,} from "react-icons/fa";
 
 const { Content } = Layout;
 

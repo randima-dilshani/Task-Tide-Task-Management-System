@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Layout,
-  Card,
-  Row,
-  Col,
-  Button,
-  Table,
-  Pagination,
-  Tag,
-} from "antd";
-import {
-  AppstoreOutlined,
-  UnorderedListOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+import { Layout, Card, Row, Col, Button, Table, Pagination, Tag,} from "antd";
+import { AppstoreOutlined, UnorderedListOutlined, ClockCircleOutlined,} from "@ant-design/icons";
 import Logo from "../Sidebar/Logo";
 import MenuList from "../Sidebar/MenuList";
 import axios from "axios";

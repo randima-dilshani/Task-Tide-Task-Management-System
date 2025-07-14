@@ -48,27 +48,26 @@ const CreateTaskForm = ({ open, setOpen, getTask }) => {
       );
       console.log("Task created:", response.data);
 
-      form.resetFields(); // Reset form fields after successful submission
-      setOpen(false); // Close the modal after successful submission
-      getTask(); // Fetch all tasks to update the tasks list
+      form.resetFields(); 
+      setOpen(false); 
+      getTask(); 
     } catch (error) {
       console.error("Error creating task:", error);
-      // Handle error case here
     }
   };
 
   const handleCancel = () => {
-    form.resetFields(); // Reset form fields when the modal is closed
-    setOpen(false); // Close the modal
+    form.resetFields(); 
+    setOpen(false); 
   };
 
   return (
     <Modal
       title={<span style={{ fontWeight: "bold" }}>ADD TASK</span>}
       visible={open}
-      onOk={handleSubmit} // Call handleSubmit function on OK button click
+      onOk={handleSubmit}   
       onCancel={handleCancel}
-      okText="Submit" // Rename OK button to Submit
+      okText="Submit"
       cancelText="Cancel"
     >
       <Form

@@ -49,7 +49,6 @@ const MenuList = () => {
         navigate(e.key);
       } catch (error) {
         console.error("Error fetching user profile:", error);
-        // You can show a toast or message here
       }
     } else {
       setSelectedKeys([e.key]);
@@ -101,8 +100,7 @@ const MenuList = () => {
   ];
 
   // Change menu mode based on screen width (inline for desktop, vertical for mobile)
-  const isMobile = windowWidth < 768; // Tailwind md breakpoint ~768px
-
+  const isMobile = windowWidth < 768; 
   return (
     <Menu
       theme="dark"

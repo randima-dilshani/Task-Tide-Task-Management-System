@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import LogoImg from "../assets/images/task2.png"; // Adjust path if needed
+import LogoImg from "../assets/images/task2.png"; 
 
 const LandingPage = () => {
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-gray-950 text-white relative overflow-hidden">
 
-      {/* 🌟 Glass Effect Navbar */}
+      {/* Glass Effect Navbar */}
       <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/10 border-b border-white/10 shadow-lg">
         <div className="flex justify-between items-center px-4 sm:px-6 md:px-12 h-[100px]">
           {/* Logo */}
