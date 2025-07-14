@@ -15,13 +15,46 @@ const MenuList = () => {
 
   const [selectedKeys, setSelectedKeys] = useState([location.pathname]);
 
+  // Add state to track window width for responsiveness
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   useEffect(() => {
     setSelectedKeys([location.pathname]);
   }, [location.pathname]);
 
-  const handleMenuSelect = (e) => {
-    setSelectedKeys([e.key]);
-    navigate(e.key);
+  useEffect(() => {
+    // Handler to update windowWidth state on resize
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleMenuSelect = async (e) => {
+    if (e.key === "/profile") {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No token found");
+
+        const response = await fetch("http://localhost:8080/api/v1/user/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch user profile");
+
+        const userData = await response.json();
+
+        localStorage.setItem("userProfile", JSON.stringify(userData));
+        setSelectedKeys([e.key]);
+        navigate(e.key);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        // You can show a toast or message here
+      }
+    } else {
+      setSelectedKeys([e.key]);
+      navigate(e.key);
+    }
   };
 
   const menuItems = [
@@ -67,6 +100,9 @@ const MenuList = () => {
     },
   ];
 
+  // Change menu mode based on screen width (inline for desktop, vertical for mobile)
+  const isMobile = windowWidth < 768; // Tailwind md breakpoint ~768px
+
   return (
     <Menu
       theme="dark"
@@ -74,6 +110,9 @@ const MenuList = () => {
       selectedKeys={selectedKeys}
       onClick={handleMenuSelect}
       items={menuItems}
+      mode={isMobile ? "vertical" : "inline"}
+      inlineCollapsed={isMobile} // Collapse inline menu on mobile for cleaner look
+      style={{ height: "100%", borderRight: 0 }}
     />
   );
 };

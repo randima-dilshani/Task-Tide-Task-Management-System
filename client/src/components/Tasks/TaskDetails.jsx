@@ -136,37 +136,43 @@ const TaskDetails = () => {
       )}
 
       <Layout>
-        <Sider className="sidebar">
+        {/* Responsive Sider */}
+        <Sider
+          breakpoint="md"
+          collapsedWidth="0"
+          className="sidebar"
+          style={{ minHeight: "100vh" }}
+        >
           <Logo />
           <MenuList />
         </Sider>
 
         <Layout>
-          <Content className="p-6 bg-gray-50 min-h-screen">
-            <div className="flex justify-between items-center mb-8 mt-16">
-              <div className="flex items-center gap-3">
+          <Content className="p-4 sm:p-6 md:p-8 bg-gray-50 min-h-screen">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 mt-4 md:mt-6">
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-0">
                 <FundOutlined style={{ fontSize: "28px", color: "#333" }} />
-                <h1 className="text-3xl font-bold text-black-800 tracking-wide">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-wide">
                   Progress Board
                 </h1>
               </div>
 
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <Badge count={5}>
-                  <Avatar size={40} className="bg-white shadow">
+                  <Avatar size={36} className="bg-white shadow">
                     <BellOutlined className="text-xl text-purple-600" />
                   </Avatar>
                 </Badge>
                 <Button
                   icon={<PlusOutlined />}
-                  size="large"
+                  size="middle"
                   onClick={toggleModal}
                   style={{
                     backgroundColor: "#1E3A8A",
                     color: "#fff",
                     border: "none",
                   }}
-                  className="hover:scale-105 transition-transform duration-300"
+                  className="hover:scale-105 transition-transform duration-300 text-sm sm:text-base"
                 >
                   Create Task
                 </Button>
@@ -174,30 +180,29 @@ const TaskDetails = () => {
             </div>
 
             {/* My/All Tasks Toggle */}
-            <div className="mb-6 max-w-md">
+            <div className="mb-5 max-w-xs sm:max-w-md">
               <Radio.Group
                 value={showMyTasks ? "my" : "all"}
                 onChange={(e) => setShowMyTasks(e.target.value === "my")}
                 optionType="button"
                 buttonStyle="solid"
+                className="w-full"
               >
                 <Radio.Button
                   value="my"
-                  style={{
-                    backgroundColor: showMyTasks ? "#1e2e5aff" : "#f0f0f0",
-                    color: showMyTasks ? "#fff" : "#000",
-                    borderColor: "#1E3A8A",
-                  }}
+                  className={`w-1/2 text-center text-sm sm:text-base ${
+                    showMyTasks ? "bg-blue-900 text-white" : "bg-gray-100 text-black"
+                  }`}
+                  style={{ borderColor: "#1E3A8A" }}
                 >
                   My Tasks
                 </Radio.Button>
                 <Radio.Button
                   value="all"
-                  style={{
-                    backgroundColor: !showMyTasks ? "#1E3A8A" : "#f0f0f0",
-                    color: !showMyTasks ? "#fff" : "#000",
-                    borderColor: "#1E3A8A",
-                  }}
+                  className={`w-1/2 text-center text-sm sm:text-base ${
+                    !showMyTasks ? "bg-blue-900 text-white" : "bg-gray-100 text-black"
+                  }`}
+                  style={{ borderColor: "#1E3A8A" }}
                 >
                   All Tasks
                 </Radio.Button>
@@ -205,13 +210,15 @@ const TaskDetails = () => {
             </div>
 
             {/* Search */}
-            <div className="mb-8 max-w-md">
+            <div className="mb-6 max-w-xs sm:max-w-md">
               <Input
                 placeholder="Search by task title or assigned user"
                 prefix={<SearchOutlined />}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 allowClear
+                size="middle"
+                className="rounded-md"
               />
             </div>
 
@@ -219,14 +226,21 @@ const TaskDetails = () => {
               <CreateTasks open={open} setOpen={setOpen} getTask={fetchTasks} />
             )}
 
-            <Row gutter={[24, 24]}>
+            <Row gutter={[16, 16]}>
               {["Pending", "Inprogress", "Completed"].map((status) => {
                 const statusFilteredTasks = filteredTasks.filter(
                   (task) => task.status.toLowerCase() === status.toLowerCase()
                 );
 
                 return (
-                  <Col xs={24} sm={24} md={12} lg={8} key={status}>
+                  <Col
+                    xs={24}
+                    sm={24}
+                    md={12}
+                    lg={8}
+                    key={status}
+                    className="mb-4"
+                  >
                     <Card
                       title={
                         <span className="flex items-center gap-2 font-semibold text-lg">
@@ -251,9 +265,7 @@ const TaskDetails = () => {
                       className="shadow-md"
                     >
                       {statusFilteredTasks.length === 0 && (
-                        <p className="text-gray-500 mt-6">
-                          No tasks in this category.
-                        </p>
+                        <p className="text-gray-500 mt-6">No tasks in this category.</p>
                       )}
                       {statusFilteredTasks.map((task, i) => (
                         <motion.div
@@ -271,20 +283,20 @@ const TaskDetails = () => {
                             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                           }}
                         >
-                          <div className="flex justify-between items-start">
-                            <div>
+                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 text-lg font-semibold mb-1">
                                 <span
                                   className={`w-3 h-3 rounded-full inline-block ${
                                     TASK_TYPE[status.toLowerCase()]
                                   }`}
                                 />
-                                {task.title}
+                                <span className="truncate">{task.title}</span>
                               </div>
 
-                              <div className="text-sm text-gray-600 mb-1">
+                              <div className="text-sm text-gray-600 mb-1 truncate">
                                 Assigned To:{" "}
-                                <span className="text-black font-medium">
+                                <span className="text-black font-medium truncate">
                                   {task.user?.username || "Unassigned"}
                                 </span>
                               </div>
@@ -294,7 +306,9 @@ const TaskDetails = () => {
                                 {new Date(task.dueDate).toLocaleDateString()}
                               </div>
 
-                              <p className="text-gray-700">{task.description}</p>
+                              <p className="text-gray-700 line-clamp-3">
+                                {task.description}
+                              </p>
 
                               <div className="text-xs text-gray-500 mt-3">
                                 Created:{" "}
@@ -302,11 +316,12 @@ const TaskDetails = () => {
                               </div>
                             </div>
 
-                            <div className="flex flex-col items-center space-y-2">
+                            <div className="flex flex-row sm:flex-col items-center space-x-4 sm:space-x-0 sm:space-y-2 mt-4 sm:mt-0">
                               <Button
                                 type="text"
                                 onClick={() => handleViewTask(task._id)}
                                 className="transition-colors duration-200 hover:text-blue-600"
+                                aria-label="View Task"
                               >
                                 <EyeOutlined
                                   style={{ fontSize: "18px", color: "#6b7280" }}
@@ -322,6 +337,7 @@ const TaskDetails = () => {
                                 }
                                 onClick={() => handleEditButtonClick(task)}
                                 className="transition-colors duration-200 hover:text-green-600"
+                                aria-label="Edit Task"
                               />
 
                               <Popconfirm
@@ -344,6 +360,7 @@ const TaskDetails = () => {
                                     />
                                   }
                                   className="transition-colors duration-200 hover:text-red-600"
+                                  aria-label="Delete Task"
                                 />
                               </Popconfirm>
                             </div>

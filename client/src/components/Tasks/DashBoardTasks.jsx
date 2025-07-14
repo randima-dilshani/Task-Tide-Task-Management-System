@@ -89,6 +89,7 @@ const DashBoardTasks = () => {
       title: <span style={{ whiteSpace: "nowrap" }}>Title</span>,
       dataIndex: "title",
       key: "title",
+      // responsive: true, // AntD v4.16+ has responsive prop, optional here
     },
     {
       title: <span style={{ whiteSpace: "nowrap" }}>Description</span>,
@@ -150,19 +151,29 @@ const DashBoardTasks = () => {
 
   return (
     <Layout>
-      <Content style={{ padding: "20px" }}>
+      <Content className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12">
         <div className="dashboard-header">
-          <h1 className="dashboard-title font-bold text-xl mb-4">
+          <h1 className="dashboard-title font-bold text-xl sm:text-2xl md:text-3xl mb-6">
             Manage and Track Your Tasks
           </h1>
         </div>
         <Row gutter={[16, 16]}>
           {/* Left side: Table */}
-          <Col xs={24} sm={24} md={12} lg={15}>
+          <Col
+            xs={24}
+            sm={24}
+            md={12}
+            lg={15}
+            className="overflow-auto"
+            style={{ minHeight: "300px" }}
+          >
             <Card
-              title={<span className="text-blue-700 font-bold text-lg">📋 Tasks Dashboard</span>}
+              title={
+                <span className="text-blue-700 font-bold text-lg">📋 Tasks Dashboard</span>
+              }
               bordered={false}
               className="shadow-lg rounded-xl bg-white"
+              bodyStyle={{ padding: "12px" }}
             >
               <Table
                 dataSource={tasks}
@@ -176,6 +187,8 @@ const DashBoardTasks = () => {
                 }
                 bordered={false}
                 className="modern-table"
+                scroll={{ x: "max-content" }} // enable horizontal scroll on small devices
+                size="middle"
               />
             </Card>
           </Col>
@@ -184,17 +197,19 @@ const DashBoardTasks = () => {
           <Col xs={24} sm={24} md={12} lg={9}>
             {/* Highlighted Overview */}
             <Card
-              title={<span className="text-blue-700 font-bold text-lg">📊 Task Overview</span>}
+              title={
+                <span className="text-blue-700 font-bold text-lg">📊 Task Overview</span>
+              }
               bordered={false}
               className="shadow-lg rounded-xl mb-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50 border border-blue-100"
             >
-              <div className="flex justify-around items-center">
+              <div className="flex justify-around items-center flex-wrap gap-4">
                 <div className="flex flex-col items-center">
                   <Progress
                     type="circle"
                     percent={completedPercent}
                     strokeColor="#22c55e"
-                    width={80}
+                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80} 
                   />
                   <span className="mt-2 font-semibold text-sm text-green-600">
                     Completed
@@ -205,7 +220,7 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={inprogressPercent}
                     strokeColor="#3b82f6"
-                    width={80}
+                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80}
                   />
                   <span className="mt-2 font-semibold text-sm text-blue-600">
                     In Progress
@@ -216,7 +231,7 @@ const DashBoardTasks = () => {
                     type="circle"
                     percent={pendingPercent}
                     strokeColor="#f97316"
-                    width={80}
+                    width={isNaN(window.innerWidth) ? 80 : window.innerWidth < 640 ? 60 : 80}
                   />
                   <span className="mt-2 font-semibold text-sm text-orange-600">
                     Pending
@@ -227,7 +242,9 @@ const DashBoardTasks = () => {
 
             {/* Calendar */}
             <Card
-              title={<span className="text-blue-700 font-bold text-lg">📅 Calendar</span>}
+              title={
+                <span className="text-blue-700 font-bold text-lg">📅 Calendar</span>
+              }
               bordered={false}
               style={{ height: "360px", overflowY: "auto" }}
               className="shadow-lg rounded-xl bg-gradient-to-br from-pink-50 via-white to-red-50 border border-pink-100"

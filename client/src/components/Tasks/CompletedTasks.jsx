@@ -120,7 +120,7 @@ const CompletedTasks = () => {
           <div className="flex justify-between items-center mt-16 mb-6">
             <div className="bg-gradient-to-r from-green-100 to-green-300 px-6 py-3 rounded-xl shadow text-center">
               <h1 className="text-2xl md:text-3xl font-bold text-green-800 tracking-wide flex items-center justify-center gap-2">
-                ✅ <span>Completed Tasks</span>
+                ✅ <span>All Completed Tasks</span>
               </h1>
             </div>
 

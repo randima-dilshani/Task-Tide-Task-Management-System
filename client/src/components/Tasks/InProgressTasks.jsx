@@ -119,7 +119,7 @@ const InProgressTasks = () => {
           <div className="flex justify-between items-center mt-16 mb-6">
            <div className="px-6 py-3 rounded-xl shadow text-center" style={{ backgroundColor: "#fffbe6" }}>
   <h1 className="text-2xl md:text-3xl font-bold text-yellow-800 tracking-wide flex items-center justify-center gap-2">
-    🔄 <span>In Progress Tasks</span>
+    🔄 <span>All In Progress Tasks</span>
   </h1>
 </div>
             <div>
