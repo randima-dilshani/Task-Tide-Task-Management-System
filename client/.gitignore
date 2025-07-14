@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test coverage reports
+coverage/
+
+# Jest cache
+.jest-cache/
+
+# Optional: nyc coverage output (if you use nyc)
+.nyc_output/
