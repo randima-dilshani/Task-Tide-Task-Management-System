@@ -26,8 +26,26 @@ Welcome to **Task Tide**, a beautiful and efficient full-stack task management a
 
 ---
 
-🔧 Local Setup Instructions
+🚀 Local Setup Instructions
+
 1. 📦 Clone the Repository
 
 git clone https://github.com/randima-dilshani/Task-Tide-Task-Management-System.git
+
 cd task-tide
+
+2. 🔁Backend Setup
+
+cd task-api
+
+npm install
+
+📄 Create .env file inside task-api/ directory:
+
+PORT=8080
+MONGO_URI=your_mongodb_connection_url
+JWT_SECRET=your_jwt_secret
+
+▶️ Start the server:
+
+npm run dev
