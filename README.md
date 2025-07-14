@@ -22,3 +22,30 @@ Welcome to **Task Tide**, a beautiful and efficient full-stack task management a
 |---------|---------|----------|--------------|---------|
 | React + Vite | Node.js + Express | MongoDB | Ant Design, TailwindCSS | Vitest, React Testing Library |
 | Axios | REST API | Mongoose | Framer Motion | Jest (where needed) |
+
+## 📂 Project Structure
+
+task-tide/
+├── client/ # React Frontend
+│ ├── src/
+│ │ ├── components/
+│ │ ├── pages/
+│ │ ├── util/
+│ │ └── tests/
+│ └── vite.config.js
+├── server/ # Node.js Backend
+│ ├── controllers/
+│ ├── models/
+│ ├── routes/
+│ ├── middleware/
+│ └── config/
+└── README.md
+
+---
+
+## 🔧 Local Setup Instructions
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/task-tide.git
+cd task-tide
